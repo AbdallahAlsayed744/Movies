@@ -10,11 +10,13 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.hyperdesign.moviesapp.common.ui.component.appbar.bottombar.MoviesBottomNavigationBar
 import com.hyperdesign.moviesapp.common.ui.extention.ObserveAsEvents
 import com.hyperdesign.moviesapp.common.ui.navigation.INavigator
 import com.hyperdesign.moviesapp.common.ui.navigation.NavigationEvent
 import com.hyperdesign.moviesapp.common.ui.navigation.buildNavBoardingGraph
-import com.hyperdesign.moviesapp.ui.theme.MoviesAppTheme
+import com.hyperdesign.moviesapp.common.ui.navigation.buildNavHomeGraph
+import com.hyperdesign.moviesapp.common.ui.theme.MoviesAppTheme
 import org.koin.compose.koinInject
 
 
@@ -42,6 +44,10 @@ fun MoviesApp(
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             bottomBar = {
+                MoviesBottomNavigationBar(
+                    navHostController = navHostController,
+                    navigator = navigator
+                )
 
             },
             topBar = {
@@ -54,6 +60,7 @@ fun MoviesApp(
                     startDestination = navigator.startGraph,
                 ) {
                     buildNavBoardingGraph()
+                    buildNavHomeGraph()
 
                 }
             }
