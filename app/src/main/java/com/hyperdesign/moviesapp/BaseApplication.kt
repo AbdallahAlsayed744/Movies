@@ -2,6 +2,8 @@ package com.hyperdesign.moviesapp
 
 import android.app.Application
 import com.hyperdesign.moviesapp.common.di.appModule
+import com.hyperdesign.moviesapp.common.di.remoteDataSourceModule
+import com.hyperdesign.moviesapp.features.home.di.HomeModule
 import com.hyperdesign.moviesapp.features.launchflow.splash.di.splashModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -16,6 +18,9 @@ class BaseApplication : Application() {
             modules(
                 appModule,
                 splashModule,
+                remoteDataSourceModule,
+                HomeModule
+
             )
         }
     }

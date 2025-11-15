@@ -17,4 +17,12 @@ val appModule = module {
     single<IEventController<IMessageEvent>>(qualifier = named("MessageEvent")) { EventController() }
     single<IEventController<ILoadingEvent>>(qualifier = named("LoadingEvent")){ EventController() }
     single<IEventController<ILanguageEvent>>(qualifier = named("LanguageEvent")) { EventController() }
+    single<Json> {
+        Json {
+            ignoreUnknownKeys = true
+            prettyPrint = true
+            isLenient = true
+            encodeDefaults = true
+        }
+    }
 }

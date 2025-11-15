@@ -4,4 +4,6 @@
     <string name="search">Search</string>
     <string name="save">Save</string>
     <string name="watch_list">Watch List</string>
+    <string name="what_do_you_want_to_watch">What Do You Want To Watch?</string>
+    <string name="something_wrong">Somthing Wrong</string>
 </resources>

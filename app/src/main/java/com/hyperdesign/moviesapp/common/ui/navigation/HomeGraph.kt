@@ -4,6 +4,7 @@ import androidx.compose.material3.Text
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.hyperdesign.moviesapp.features.home.ui.screen.HomeScreen
 import kotlinx.serialization.Serializable
 
 interface HomeGraph {
@@ -26,7 +27,7 @@ fun NavGraphBuilder.buildNavHomeGraph() {
     navigation<HomeGraph.OnBHomeGraph>(startDestination = HomeGraph.HomeDestination) {
         composable<HomeGraph.HomeDestination> {
 
-            Text("Home")
+            HomeScreen()
 
 //            HomeScreen()
         }

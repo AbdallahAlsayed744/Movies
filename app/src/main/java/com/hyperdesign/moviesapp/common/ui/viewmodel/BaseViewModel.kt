@@ -3,12 +3,16 @@ package com.hyperdesign.moviesapp.common.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavOptionsBuilder
+import com.hyperdesign.moviesapp.R
+import com.hyperdesign.moviesapp.common.data.model.exception.MoviesException
 import com.hyperdesign.moviesapp.common.domain.model.Resource
-import com.hyperdesign.moviesapp.common.domain.model.exception.MoviesException
+import com.hyperdesign.moviesapp.common.domain.model.exception.IErrorKeyEnum
+import com.hyperdesign.moviesapp.common.ui.errorhandling.model.UIText
 import com.hyperdesign.moviesapp.common.ui.eventcontroller.IEventController
 import com.hyperdesign.moviesapp.common.ui.langauge.ILanguageEvent
 import com.hyperdesign.moviesapp.common.ui.loading.ILoadingEvent
 import com.hyperdesign.moviesapp.common.ui.messages.IMessageEvent
+import com.hyperdesign.moviesapp.common.ui.navigation.HomeGraph
 import com.hyperdesign.moviesapp.common.ui.navigation.IDestination
 import com.hyperdesign.moviesapp.common.ui.navigation.INavigator
 import kotlinx.coroutines.flow.Flow
@@ -60,7 +64,7 @@ abstract class BaseViewModel<State, Action>(stateType: State) : ViewModel(), Koi
         this@collectResource.collect { resource ->
             when (resource) {
                 is Resource.Failure -> {
-//                    handleExceptions(resource.exception, ::onRequestValidation)
+                    handleExceptions(resource.exception, ::onRequestValidation)
                     onFailure(resource.exception)
                 }
 
@@ -72,7 +76,7 @@ abstract class BaseViewModel<State, Action>(stateType: State) : ViewModel(), Koi
 
     private fun handleExceptions(
         exception: MoviesException,
-//        onRequestValidation: (Map<IErrorKeyEnum, UIText>) -> Unit = {},
+        onRequestValidation: (Map<IErrorKeyEnum, UIText>) -> Unit = {},
     ) {
         when (exception) {
 //            is ALTashiratException.Client.ResponseValidation -> onRequestValidation(
@@ -101,17 +105,47 @@ abstract class BaseViewModel<State, Action>(stateType: State) : ViewModel(), Koi
 //            is ALTashiratException.Server.InternalServerError -> handleExceptionMessages(message = exception.message)
 //
 //            is ALTashiratException.UnKnown -> handleExceptionMessages(message = exception.message)
+            is MoviesException.Client.ResponseValidation -> onRequestValidation(
+                exception.errors.mapValues { UIText.DynamicString(it.value) }
+            )
+
+            is MoviesException.Client.UnAuthorized -> fireNavigate(
+                destination = HomeGraph.HomeDestination
+            )
+
+            is MoviesException.Client.Unhandled -> handleExceptionMessages(message = exception.message)
+
+            is MoviesException.Local.IOOperation -> handleExceptionMessages(message = exception.message)
+
+            is MoviesException.Local.RequestValidation ->
+            {
+//                onRequestValidation(
+//                    exception.errors
+//                        .mapValues { requestErrorMap[it.value] ?: UIText.StringResource(R.string.unkown_error) }
+//                )
+
+            }
+
+            is MoviesException.Local.Unhandled -> handleExceptionMessages(message = exception.message)
+
+            is MoviesException.Network.Repeatable -> handleExceptionMessages(message = exception.message)
+
+            is MoviesException.Network.Unhandled -> handleExceptionMessages(message = exception.message)
+
+            is MoviesException.Server.InternalServerError -> handleExceptionMessages(message = exception.message)
+
+            is MoviesException.UnKnown -> handleExceptionMessages(message = exception.message)
         }
     }
 
-//    open fun onRequestValidation(errors: Map<IErrorKeyEnum, UIText>) {}
+    open fun onRequestValidation(errors: Map<IErrorKeyEnum, UIText>) {}
 
-//    private fun handleExceptionMessages(message: String?) = fireMessage(
-//        messageEventType = IMessageEvent.Toast(
-//            message = message?.let { UIText.DynamicString(it) }
-//                ?: UIText.StringResource(R.string.something_wrong)
-//        )
-//    )
+    private fun handleExceptionMessages(message: String?) = fireMessage(
+        messageEventType = IMessageEvent.Toast(
+            message = message?.let { UIText.DynamicString(it) }
+                ?: UIText.StringResource(R.string.something_wrong)
+        )
+    )
 
     companion object {
 //        private val requestErrorMap = mapOf<RequestErrorKeyValues, UIText>(
