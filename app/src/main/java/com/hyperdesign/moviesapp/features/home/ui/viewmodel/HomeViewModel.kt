@@ -1,21 +1,26 @@
 package com.hyperdesign.moviesapp.features.home.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hyperdesign.moviesapp.common.ui.loading.ILoadingEvent
 import com.hyperdesign.moviesapp.common.ui.viewmodel.BaseViewModel
+import com.hyperdesign.moviesapp.features.home.domain.model.CategoryResponse
 import com.hyperdesign.moviesapp.features.home.domain.model.HomeFilms
+import com.hyperdesign.moviesapp.features.home.domain.usecase.GetCategoriesUseCase
 import com.hyperdesign.moviesapp.features.home.domain.usecase.GetMoviesUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
-    private val getMoviesUseCase: GetMoviesUseCase
+    private val getMoviesUseCase: GetMoviesUseCase,
+    private val getCategoriesUseCase: GetCategoriesUseCase
 ): BaseViewModel<HomeScreenContract.HomeScreenState, HomeScreenContract.HomeScreenAction>(HomeScreenContract.HomeScreenState()) {
 
 
     init {
         getHomeFilms()
+        getCategories()
     }
 
     override fun onActionTrigger(action: HomeScreenContract.HomeScreenAction) {
@@ -31,20 +36,34 @@ class HomeViewModel(
 
 
 
-    fun getHomeFilms()=viewModelScope.launch(Dispatchers.IO) {
+    private fun getHomeFilms()=viewModelScope.launch(Dispatchers.IO) {
         getMoviesUseCase.invoke(body = Unit).collectResource(
+
             onSuccess =::showHomFilmsSuccess,
             onLoading =::onLoading
         )
     }
 
+    private fun getCategories()=viewModelScope.launch(Dispatchers.IO) {
+        getCategoriesUseCase.invoke(Unit).collectResource(
+            onSuccess = ::getCategoriesSuccess
+        )
+    }
 
 
+
+    private fun getCategoriesSuccess(categoryResponse: CategoryResponse){
+        updateState {
+            copy(
+                cateogreies = categoryResponse
+            )
+        }
+    }
     private fun onLoading(isLoading: Boolean) = fireLoading(
         loadingEventType = ILoadingEvent.CircularProgressIndicator(isLoading = isLoading))
 
 
-    fun showHomFilmsSuccess(
+    private fun showHomFilmsSuccess(
         homeFilms: HomeFilms
     ){
         updateState {
@@ -54,7 +73,7 @@ class HomeViewModel(
         }
     }
 
-    fun changeSeqrchQuery(query:String){
+    private fun changeSeqrchQuery(query:String){
         updateState {
             copy(
                 query = query

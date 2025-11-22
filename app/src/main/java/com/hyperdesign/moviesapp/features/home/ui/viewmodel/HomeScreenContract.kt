@@ -1,5 +1,6 @@
 package com.hyperdesign.moviesapp.features.home.ui.viewmodel
 
+import com.hyperdesign.moviesapp.features.home.domain.model.CategoryResponse
 import com.hyperdesign.moviesapp.features.home.domain.model.HomeFilms
 
 sealed interface HomeScreenContract {
@@ -8,6 +9,7 @@ sealed interface HomeScreenContract {
 
         val query:String ="",
         val movies : HomeFilms?=null,
+        val cateogreies: CategoryResponse?=null
 
     ):HomeScreenContract
 

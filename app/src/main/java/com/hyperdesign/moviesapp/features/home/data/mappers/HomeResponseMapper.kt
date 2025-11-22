@@ -27,8 +27,8 @@ object TitleMapper{
         originalTitle = titleDto.originalTitle,
         plot = titleDto.plot,
         primaryTitle = titleDto.primaryTitle,
-        primaryImage = PrimaryImageMapper.toDomain(titleDto.primaryImage),
-        rating = RatingMapper.toDomain(titleDto.rating),
+        primaryImage = titleDto.primaryImage?.let { PrimaryImageMapper.toDomain(it) },
+        rating = titleDto.rating?.let { RatingMapper.toDomain(it) },
         runtimeSeconds = titleDto.runtimeSeconds,
         startYear = titleDto.startYear,
         type = titleDto.type

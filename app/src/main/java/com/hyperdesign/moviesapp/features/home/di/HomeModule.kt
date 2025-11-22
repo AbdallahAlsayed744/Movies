@@ -4,6 +4,7 @@ import com.hyperdesign.moviesapp.features.home.data.repo.HomeRepo
 import com.hyperdesign.moviesapp.features.home.data.repo.remote.HomeApiService
 import com.hyperdesign.moviesapp.features.home.domain.repo.IHomeRepo
 import com.hyperdesign.moviesapp.features.home.domain.repo.remote.IHomeApiService
+import com.hyperdesign.moviesapp.features.home.domain.usecase.GetCategoriesUseCase
 import com.hyperdesign.moviesapp.features.home.domain.usecase.GetMoviesUseCase
 import com.hyperdesign.moviesapp.features.home.ui.viewmodel.HomeViewModel
 import org.koin.core.module.Module
@@ -21,6 +22,8 @@ val HomeModule = module {
     factoryOf(::GetMoviesUseCase)
 
     viewModelOf(::HomeViewModel)
+
+    factoryOf(::GetCategoriesUseCase)
 
 
 }

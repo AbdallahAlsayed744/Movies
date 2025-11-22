@@ -4,15 +4,15 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class TitleDto(
-    val endYear: Int,
-    val genres: List<String>,
     val id: String,
-    val originalTitle: String,
-    val plot: String,
-    val primaryImage: PrimaryImageDto,
     val primaryTitle: String,
-    val rating: RatingDto,
-    val runtimeSeconds: Int,
+    val originalTitle: String,
+    val type: String,
     val startYear: Int,
-    val type: String
+    val endYear: Int? = null,  // Make optional with default null
+    val runtimeSeconds: Int? = null,  // Make optional in case it's missing
+    val genres: List<String> = emptyList(),  // Provide default empty list
+    val primaryImage: PrimaryImageDto? = null,  // Make optional
+    val plot: String = "",  // Provide default empty string
+    val rating: RatingDto? = null  // Make optional
 )
