@@ -1,7 +1,10 @@
 package com.hyperdesign.moviesapp.features.home.data.repo
 
+import com.hyperdesign.moviesapp.features.home.data.mappers.CategoryByIdResponseMapper
 import com.hyperdesign.moviesapp.features.home.data.mappers.CatogoryResponseMapper
 import com.hyperdesign.moviesapp.features.home.data.mappers.HomeResponseMapper
+import com.hyperdesign.moviesapp.features.home.data.model.dto.CategoryByIdResponseDto
+import com.hyperdesign.moviesapp.features.home.domain.model.CategoryByIdResponse
 import com.hyperdesign.moviesapp.features.home.domain.model.CategoryResponse
 import com.hyperdesign.moviesapp.features.home.domain.model.HomeFilms
 import com.hyperdesign.moviesapp.features.home.domain.repo.IHomeRepo
@@ -16,5 +19,10 @@ class HomeRepo(private val homeApiSerice: IHomeApiService): IHomeRepo {
     override suspend fun getCategories(): CategoryResponse {
         val categoryResponse = homeApiSerice.getCategories()
         return CatogoryResponseMapper.toDonmain(categoryResponse)
+    }
+
+    override suspend fun getFilmsByCategory(categoryId: String): CategoryByIdResponse {
+        val categoryByIdResponse = homeApiSerice.getFilmsByCategory(categoryId)
+        return CategoryByIdResponseMapper.toDomain(categoryByIdResponse)
     }
 }

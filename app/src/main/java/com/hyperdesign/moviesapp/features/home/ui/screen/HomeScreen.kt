@@ -1,18 +1,24 @@
 package com.hyperdesign.moviesapp.features.home.ui.screen
 
 import android.util.Log
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.hyperdesign.moviesapp.R
 import com.hyperdesign.moviesapp.features.home.ui.component.FilmItem
+import com.hyperdesign.moviesapp.features.home.ui.component.ImageGridCell
 import com.hyperdesign.moviesapp.features.home.ui.component.ScrollableTabLayoutEnhanced
 import com.hyperdesign.moviesapp.features.home.ui.component.SearchBar
 import com.hyperdesign.moviesapp.features.home.ui.viewmodel.HomeScreenContract
@@ -46,51 +53,96 @@ fun HomeScreenContent(
     state: HomeScreenContract.HomeScreenState,
     action:( HomeScreenContract.HomeScreenAction)->Unit
 ){
-    val scrollState = rememberScrollState()
-
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .statusBarsPadding()
-            .padding(16.dp)
-            .verticalScroll(scrollState)
-
+            .navigationBarsPadding()
+            .padding(bottom = 24.dp)
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
 
-        Text(stringResource(R.string.what_do_you_want_to_watch), color = MaterialTheme.colorScheme.onSecondary, fontWeight = FontWeight.Bold)
+        item {
+            Text(
+                stringResource(R.string.what_do_you_want_to_watch),
+                color = MaterialTheme.colorScheme.onSecondary,
+                fontWeight = FontWeight.Bold
+            )
+        }
 
+        item {
+            SearchBar(
+                query = state.query,
+                onQueryChange = { action(HomeScreenContract.HomeScreenAction.chabgeQuery(it)) },
+                onSearch = {}
+            )
+        }
 
-        Spacer(modifier = Modifier.height(20.dp))
-
-        SearchBar(
-            query =state.query,
-            onQueryChange = {action(HomeScreenContract.HomeScreenAction.chabgeQuery(it))},
-            onSearch = {}
-        )
-
-        Spacer(modifier = Modifier.height(30.dp))
-
-        LazyRow (modifier = Modifier.fillMaxWidth()){
-
-            state.movies?.let {
-                items(it.titles, key = {item->item.id}){movieImage->
-                    FilmItem(movieImage)
-                    Spacer(modifier = Modifier.width(5.dp))
-
+        item {
+            LazyRow(modifier = Modifier.fillMaxWidth()) {
+                state.movies?.let {
+                    items(it.titles, key = { item -> item.id }) { movieImage ->
+                        FilmItem(movieImage)
+                        Spacer(modifier = Modifier.width(5.dp))
+                    }
                 }
             }
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
+        item {
+            state.cateogreies?.let {
+                ScrollableTabLayoutEnhanced(
+                    tabs = it.categories,
+                    selectedTabIndex = state.categoryChangeNumber,
+                    onTabSelected = { action(HomeScreenContract.HomeScreenAction.chabgeCategoryNumber(it)) },
+                    onTabClick = { categoryId ->
+                        action(HomeScreenContract.HomeScreenAction.ChangeCategoryId(categoryId))
+                    }
+                )
+            }
+        }
 
+        state.categoryByIdResponse?.let { response ->
+            items(response.similarInterests.size) { index ->
+                if (index % 2 == 0) {
+                    val firstItem = response.similarInterests.getOrNull(index)
+                    val secondItem = response.similarInterests.getOrNull(index + 1)
 
-        state.cateogreies?.let { ScrollableTabLayoutEnhanced(tabs = it.categories) }
+                   Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        if (firstItem != null) {
+                            Box(
+                                modifier = Modifier
+                                    .weight(1f)
+                            ) {
+                                ImageGridCell(firstItem)
+                            }
+                        } else {
+                            Spacer(
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
 
-
-
-
-
-
-
+                        if (secondItem != null) {
+                            Box(
+                                modifier = Modifier
+                                    .weight(1f)
+                            ) {
+                                ImageGridCell(secondItem)
+                            }
+                        } else {
+                            Spacer(
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
+                    }
+                }
+            }
+        }
     }
 }

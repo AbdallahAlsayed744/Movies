@@ -5,16 +5,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hyperdesign.moviesapp.common.ui.loading.ILoadingEvent
 import com.hyperdesign.moviesapp.common.ui.viewmodel.BaseViewModel
+import com.hyperdesign.moviesapp.features.home.domain.model.CategoryByIdResponse
 import com.hyperdesign.moviesapp.features.home.domain.model.CategoryResponse
 import com.hyperdesign.moviesapp.features.home.domain.model.HomeFilms
 import com.hyperdesign.moviesapp.features.home.domain.usecase.GetCategoriesUseCase
+import com.hyperdesign.moviesapp.features.home.domain.usecase.GetFilmsByCategoryUseCase
 import com.hyperdesign.moviesapp.features.home.domain.usecase.GetMoviesUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val getMoviesUseCase: GetMoviesUseCase,
-    private val getCategoriesUseCase: GetCategoriesUseCase
+    private val getCategoriesUseCase: GetCategoriesUseCase,
+    private val getFilmsByCategoryUseCase: GetFilmsByCategoryUseCase
 ): BaseViewModel<HomeScreenContract.HomeScreenState, HomeScreenContract.HomeScreenAction>(HomeScreenContract.HomeScreenState()) {
 
 
@@ -30,10 +33,27 @@ class HomeViewModel(
                 changeSeqrchQuery(action.query)
 
             }
+            is HomeScreenContract.HomeScreenAction.chabgeCategoryNumber -> {
+
+                changeCategoryNumber(action.categoryChangeNumber)
+
+            }
+
+            is HomeScreenContract.HomeScreenAction.ChangeCategoryId ->{
+                changeCategoryId(action.categoryId)
+                changeCategoryById()
+            }
 
         }
     }
 
+    private fun changeCategoryId(categoryId: String) {
+        updateState {
+            copy(
+                changeCategoryId =categoryId
+            )
+        }
+    }
 
 
     private fun getHomeFilms()=viewModelScope.launch(Dispatchers.IO) {
@@ -44,6 +64,22 @@ class HomeViewModel(
         )
     }
 
+    private fun changeCategoryById ()= viewModelScope.launch(Dispatchers.IO) {
+        getFilmsByCategoryUseCase.invoke(state.value.changeCategoryId).collectResource (
+            onLoading=::onLoading,
+            onSuccess =::changeCategoryByIdSuccess
+        )
+
+
+    }
+
+    private fun changeCategoryByIdSuccess(categoryByIdResponse: CategoryByIdResponse){
+        updateState {
+            copy(
+                categoryByIdResponse=categoryByIdResponse
+            )
+        }
+    }
     private fun getCategories()=viewModelScope.launch(Dispatchers.IO) {
         getCategoriesUseCase.invoke(Unit).collectResource(
             onSuccess = ::getCategoriesSuccess
@@ -77,6 +113,14 @@ class HomeViewModel(
         updateState {
             copy(
                 query = query
+            )
+        }
+    }
+
+    private fun changeCategoryNumber(categoryChangeNumber:Int){
+        updateState {
+            copy(
+                categoryChangeNumber = categoryChangeNumber
             )
         }
     }
