@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.hyperdesign.moviesapp.features.home.ui.screen.HomeScreen
+import com.hyperdesign.moviesapp.features.search.ui.screens.SearchScreen
 import kotlinx.serialization.Serializable
 
 interface HomeGraph {
@@ -29,13 +30,11 @@ fun NavGraphBuilder.buildNavHomeGraph() {
 
             HomeScreen()
 
-//            HomeScreen()
         }
 
         composable<HomeGraph.SearchDestination> {
-            Text("Search")
+            SearchScreen()
 
-            //SearchDestination
         }
 
         composable<HomeGraph.SaveDDestination> {

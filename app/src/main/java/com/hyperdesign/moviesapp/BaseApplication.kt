@@ -5,6 +5,7 @@ import com.hyperdesign.moviesapp.common.di.appModule
 import com.hyperdesign.moviesapp.common.di.remoteDataSourceModule
 import com.hyperdesign.moviesapp.features.home.di.HomeModule
 import com.hyperdesign.moviesapp.features.launchflow.splash.di.splashModule
+import com.hyperdesign.moviesapp.features.search.di.searchModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -19,7 +20,8 @@ class BaseApplication : Application() {
                 appModule,
                 splashModule,
                 remoteDataSourceModule,
-                HomeModule
+                HomeModule,
+                searchModule
 
             )
         }
