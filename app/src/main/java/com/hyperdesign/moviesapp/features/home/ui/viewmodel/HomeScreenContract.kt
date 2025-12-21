@@ -13,7 +13,8 @@ sealed interface HomeScreenContract {
         val cateogreies: CategoryResponse?=null,
         val categoryByIdResponse: CategoryByIdResponse?=null,
         val categoryChangeNumber:Int = 0,
-        val changeCategoryId:String =""
+        val changeCategoryId:String ="",
+        val movieId: String=""
 
     ):HomeScreenContract
 
@@ -24,9 +25,15 @@ sealed interface HomeScreenContract {
 
         data class chabgeCategoryNumber(val categoryChangeNumber:Int):HomeScreenAction
 
+
+
+
         data class ChangeCategoryId(val categoryId: String): HomeScreenAction
 
-//        data object getFilms:HomeScreenAction
+
+        data class changeMovieId(val movieId: String): HomeScreenAction
+        data class navigateToMovieDetails(val movieId: String): HomeScreenAction
+
 
 
 

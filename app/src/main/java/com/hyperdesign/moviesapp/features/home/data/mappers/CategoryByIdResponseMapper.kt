@@ -1,10 +1,8 @@
 package com.hyperdesign.moviesapp.features.home.data.mappers
 
 import com.hyperdesign.moviesapp.features.home.data.model.dto.CategoryByIdResponseDto
-import com.hyperdesign.moviesapp.features.home.data.model.dto.PrimaryImageDto
 import com.hyperdesign.moviesapp.features.home.data.model.dto.SimilarInterestDto
 import com.hyperdesign.moviesapp.features.home.domain.model.CategoryByIdResponse
-import com.hyperdesign.moviesapp.features.home.domain.model.PrimaryImage
 import com.hyperdesign.moviesapp.features.home.domain.model.SimilarInterest
 
 

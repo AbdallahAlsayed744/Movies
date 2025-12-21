@@ -6,8 +6,10 @@ import com.hyperdesign.moviesapp.features.home.domain.repo.IHomeRepo
 import com.hyperdesign.moviesapp.features.home.domain.repo.remote.IHomeApiService
 import com.hyperdesign.moviesapp.features.home.domain.usecase.GetCategoriesUseCase
 import com.hyperdesign.moviesapp.features.home.domain.usecase.GetFilmsByCategoryUseCase
+import com.hyperdesign.moviesapp.features.home.domain.usecase.GetMovieDetailsUseCase
 import com.hyperdesign.moviesapp.features.home.domain.usecase.GetMoviesUseCase
 import com.hyperdesign.moviesapp.features.home.ui.viewmodel.HomeViewModel
+import com.hyperdesign.moviesapp.features.home.ui.viewmodel.MovieDetailsViewModel
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.viewModelOf
@@ -21,12 +23,15 @@ val HomeModule = module {
     factoryOf(::HomeRepo) bind IHomeRepo::class
 
     factoryOf(::GetMoviesUseCase)
+    factoryOf(::GetMovieDetailsUseCase)
 
     viewModelOf(::HomeViewModel)
 
     factoryOf(::GetCategoriesUseCase)
 
     factoryOf(::GetFilmsByCategoryUseCase)
+
+    viewModelOf(::MovieDetailsViewModel)
 
 
 }

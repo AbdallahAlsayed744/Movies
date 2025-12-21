@@ -53,13 +53,15 @@ fun SearchScreenContent(
         modifier = Modifier
             .fillMaxSize()
             .statusBarsPadding()
-            .navigationBarsPadding()
+            .navigationBarsPadding(),
+        contentAlignment = Alignment.Center
     ) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 16.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             item {
                 SearchBar(
@@ -72,13 +74,18 @@ fun SearchScreenContent(
             state.searchResult?.titles?.let { titles ->
                 if (titles.isNotEmpty()) {
                     items(titles, key = { it.id }) { title ->
-                        TitleCard(title)
+                        TitleCard(title, onNavToMoviewDetails = {movieId->
+                            action(SearchScreenContract.SearchScreenAction.changeMovieId(movieId))
+
+                            action(SearchScreenContract.SearchScreenAction.navigateToMovieDetails(movieId))
+
+                        })
                     }
                 }
             }
         }
 
-        if (state.query.isNotEmpty() || state.searchResult?.titles.isNullOrEmpty()) {
+        if (state.query.isEmpty() || state.searchResult?.titles.isNullOrEmpty()) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()

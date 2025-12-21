@@ -1,10 +1,10 @@
 package com.hyperdesign.moviesapp.features.home.data.repo.remote
 
 import com.hyperdesign.moviesapp.common.domain.repo.remote.IRemoteDataSourceProvider
-import com.hyperdesign.moviesapp.features.home.data.mappers.CatogoryResponseMapper
 import com.hyperdesign.moviesapp.features.home.data.model.dto.CategoryByIdResponseDto
 import com.hyperdesign.moviesapp.features.home.data.model.dto.CategoryResponseDto
 import com.hyperdesign.moviesapp.features.home.data.model.dto.HomeFilmsDto
+import com.hyperdesign.moviesapp.features.home.data.model.dto.MovieDetailsResponseDto
 import com.hyperdesign.moviesapp.features.home.domain.repo.remote.IHomeApiService
 
 class HomeApiService(private val remoteDataSourceProvider: IRemoteDataSourceProvider): IHomeApiService {
@@ -26,6 +26,13 @@ class HomeApiService(private val remoteDataSourceProvider: IRemoteDataSourceProv
         return remoteDataSourceProvider.get<CategoryByIdResponseDto>(
             endpoint = "interests/$categoryId",
             serializer = CategoryByIdResponseDto.serializer()
+        )
+    }
+
+    override suspend fun getMovieDetails(movieId: String): MovieDetailsResponseDto {
+        return remoteDataSourceProvider.get<MovieDetailsResponseDto>(
+            endpoint = "titles/$movieId",
+            serializer = MovieDetailsResponseDto.serializer()
         )
     }
 }

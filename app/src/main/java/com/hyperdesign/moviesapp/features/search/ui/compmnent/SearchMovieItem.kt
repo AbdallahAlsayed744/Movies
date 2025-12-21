@@ -39,18 +39,21 @@ import com.hyperdesign.moviesapp.features.home.domain.model.Title
 @Composable
 fun TitleCard(
     title: Title,
+    onNavToMoviewDetails:(String)->Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier
             .width(250.dp)
-            .aspectRatio(0.675f), // Matches typical movie poster ratio ~ 2:3
+            .aspectRatio(0.675f),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFF121212)) // Dark Netflix-like background
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF121212)) ,
+        onClick = {
+            onNavToMoviewDetails(title.id)
+        }
     ) {
         Box {
-            // Poster Image
             title.primaryImage?.url?.let { imageUrl ->
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
@@ -64,7 +67,6 @@ fun TitleCard(
                     contentScale = ContentScale.Crop
                 )
             } ?: run {
-                // Fallback if no image
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -80,7 +82,6 @@ fun TitleCard(
                 }
             }
 
-            // Gradient overlay at the bottom for text readability
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -91,14 +92,11 @@ fun TitleCard(
                         )
                     )
             )
-
-            // Content at bottom
             Column(
                 modifier = Modifier
                     .align(Alignment.BottomStart)
                     .padding(10.dp)
             ) {
-                // Title
                 Text(
                     text = title.primaryTitle,
                     color = Color.White,
@@ -110,7 +108,6 @@ fun TitleCard(
 
                 Spacer(modifier = Modifier.height(4.dp))
 
-                // Year and Runtime
                 val yearText = title.startYear.toString() +
                         if (title.endYear != null) "–${title.endYear}" else ""
 

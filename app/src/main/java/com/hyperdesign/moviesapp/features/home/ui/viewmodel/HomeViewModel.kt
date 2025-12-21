@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hyperdesign.moviesapp.common.ui.loading.ILoadingEvent
+import com.hyperdesign.moviesapp.common.ui.navigation.HomeGraph
+import com.hyperdesign.moviesapp.common.ui.navigation.HomeGraph.*
 import com.hyperdesign.moviesapp.common.ui.viewmodel.BaseViewModel
 import com.hyperdesign.moviesapp.features.home.domain.model.CategoryByIdResponse
 import com.hyperdesign.moviesapp.features.home.domain.model.CategoryResponse
@@ -12,6 +14,7 @@ import com.hyperdesign.moviesapp.features.home.domain.usecase.GetCategoriesUseCa
 import com.hyperdesign.moviesapp.features.home.domain.usecase.GetFilmsByCategoryUseCase
 import com.hyperdesign.moviesapp.features.home.domain.usecase.GetMoviesUseCase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
@@ -44,7 +47,23 @@ class HomeViewModel(
                 changeCategoryById()
             }
 
+            is HomeScreenContract.HomeScreenAction.navigateToMovieDetails -> {
+                fireNavigate(MovieDetailsDestination(action.movieId))
+            }
+
+            is HomeScreenContract.HomeScreenAction.changeMovieId -> {
+                changeMovieeId(action.movieId)
+            }
         }
+    }
+
+    private fun changeMovieeId(movieId: String) {
+        updateState {
+            copy(
+                movieId = movieId
+            )
+        }
+
     }
 
     private fun changeCategoryId(categoryId: String) {

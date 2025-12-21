@@ -1,5 +1,6 @@
 package com.hyperdesign.moviesapp.features.home.ui.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -16,12 +17,16 @@ import com.hyperdesign.moviesapp.features.home.domain.model.PrimaryImage
 import com.hyperdesign.moviesapp.features.home.domain.model.Title
 
 @Composable
-fun FilmItem(title: Title) {
+fun FilmItem(title: Title,navToMovieDetails: (String) -> Unit) {
     Box(
         modifier = Modifier
             .width(200.dp)
             .height(320.dp)
             .clip(RoundedCornerShape(10.dp))
+            .clickable {
+                navToMovieDetails(title.id)
+
+            }
     ) {
         AsyncImage(
             model = title.primaryImage?.url,

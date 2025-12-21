@@ -83,7 +83,10 @@ fun HomeScreenContent(
             LazyRow(modifier = Modifier.fillMaxWidth()) {
                 state.movies?.let {
                     items(it.titles, key = { item -> item.id }) { movieImage ->
-                        FilmItem(movieImage)
+                        FilmItem(movieImage, navToMovieDetails = {
+                            action(HomeScreenContract.HomeScreenAction.changeMovieId(it))
+                            action(HomeScreenContract.HomeScreenAction.navigateToMovieDetails(it))
+                        })
                         Spacer(modifier = Modifier.width(5.dp))
                     }
                 }
@@ -120,7 +123,10 @@ fun HomeScreenContent(
                                 modifier = Modifier
                                     .weight(1f)
                             ) {
-                                ImageGridCell(firstItem)
+                                ImageGridCell(cateogry = response,firstItem, navToMovieDetails = {
+                                    action(HomeScreenContract.HomeScreenAction.changeMovieId(it))
+                                    action(HomeScreenContract.HomeScreenAction.navigateToMovieDetails(it))
+                                })
                             }
                         } else {
                             Spacer(
@@ -133,7 +139,10 @@ fun HomeScreenContent(
                                 modifier = Modifier
                                     .weight(1f)
                             ) {
-                                ImageGridCell(secondItem)
+                                ImageGridCell(cateogry = response,secondItem, navToMovieDetails = {
+                                    action(HomeScreenContract.HomeScreenAction.changeMovieId(it))
+                                    action(HomeScreenContract.HomeScreenAction.navigateToMovieDetails(it))
+                                })
                             }
                         } else {
                             Spacer(

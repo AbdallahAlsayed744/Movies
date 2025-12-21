@@ -16,10 +16,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.hyperdesign.moviesapp.features.home.domain.model.CategoryByIdResponse
 import com.hyperdesign.moviesapp.features.home.domain.model.SimilarInterest
 
 @Composable
-fun ImageGridCell(similarInterest: SimilarInterest) {
+fun ImageGridCell(cateogry: CategoryByIdResponse, similarInterest: SimilarInterest, navToMovieDetails:(String)->Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -28,7 +29,10 @@ fun ImageGridCell(similarInterest: SimilarInterest) {
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
-        )
+        ),
+        onClick = {
+            navToMovieDetails(cateogry.id)
+        }
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),

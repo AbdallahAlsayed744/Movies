@@ -2,6 +2,8 @@ package com.hyperdesign.moviesapp.features.search.ui.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.hyperdesign.moviesapp.common.ui.loading.ILoadingEvent
+import com.hyperdesign.moviesapp.common.ui.navigation.HomeGraph
+import com.hyperdesign.moviesapp.common.ui.navigation.HomeGraph.*
 import com.hyperdesign.moviesapp.common.ui.viewmodel.BaseViewModel
 import com.hyperdesign.moviesapp.features.search.domain.usecase.SearchByTiitleUseCase
 import com.hyperdesign.moviesapp.features.search.model.SearchByTitleResponse
@@ -25,6 +27,20 @@ class SearchScreenViewModel(
                 updateState { copy(query = query) }
                 debounceSearch(query)
             }
+
+            is SearchScreenContract.SearchScreenAction.navigateToMovieDetails -> {
+                fireNavigate(MovieDetailsDestination(action.movieId))
+            }
+
+            is SearchScreenContract.SearchScreenAction.changeMovieId ->{
+                changeeMovieId(action.movieId)
+            }
+        }
+    }
+
+    private fun changeeMovieId(movieId: String) {
+        updateState {
+            copy(movieId = movieId)
         }
     }
 
